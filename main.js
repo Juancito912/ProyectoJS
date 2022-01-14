@@ -1,66 +1,48 @@
 // Se pide el nombre al usuario
-var num_ingresado;
+var monto, cuotas;
 function ingresar() {
-    num_ingresado = parseInt(prompt("Ingrese su precio de costo:"));
+    monto = parseInt(prompt("Ingrese su monto total:"));
+    cuotas = parseInt(prompt("¿En cuantas cuotas desea pagar?"));
 
-    document.write ("El precio de costo es: " + num_ingresado + " Pesos");
+    document.write ("Su monto total es: " + monto + " $ a pagar en " + cuotas +" cuotas");
 
     document.write("<br>");
 }
+
 let precio_final = 0;
 
-function sumar_IVA (precio_inicial){
+function calculo_cuotas (precio_inicial,cuota){
     const suma = function (a,b) {return a + b};
-    const sacar_IVA = function (a) {return a * 0.21}
+    switch(cuota) {
 
-    precio_final = suma(precio_inicial,sacar_IVA(precio_inicial));
+        case 3 :
+            precio_final = suma(precio_inicial,precio_inicial * 0.03);
+            return precio_final / 3;
+
+        case 6 :
+            precio_final = suma(precio_inicial,precio_inicial * 0.06);
+            return precio_final / 6;
+        case 12:
+            precio_final = suma(precio_inicial,precio_inicial * 0.12);
+            return precio_final / 12;
+        case 24:
+            precio_final = suma(precio_inicial,precio_inicial * 0.24);
+            return precio_final / 24;
+        default :
+            precio_final = precio_inicial;
+            return precio_inicial;
+    }
+
 }
 
-function mostrar_precio_final(precio){
+function mostrar_precio_final(precio,cuota,monto_cuota,monto_total){
 
-    document.write ("Su precio con IVA es: " + precio +" Pesos");
+    document.write ("Su precio inicial es:" + precio +" Pesos");
+    document.write("<br>");
+    document.write ("Sacado en "+ cuota + " cuotas seria un monto por cuota de: " +monto_cuota + " con un monto final de: " + monto_total);
 
 }
 ingresar();
-sumar_IVA(num_ingresado);
-mostrar_precio_final(precio_final);
+calculo_cuotas(monto,cuotas)
+mostrar_precio_final(monto,cuotas,calculo_cuotas(monto,cuotas),precio_final);
 document.write("<br>");
-
-var num1,num2;
-
-function ingresar_multiplos (){
-
-    num1 = parseInt(prompt("ingrese un numero"));
-    num2 = parseInt(prompt("ingrese otro numero"));
-
-    if(!parseInt(num1) || !parseInt(num2)){
-        alert("ingrese numeros validos");
-        ingresar_multiplos();
-    }
-    else{
-        document.write("Sus numeros a verificar si son multiplos son " + num1 +", " + num2);
-    }
-
-}
-let es_multiplo;
-function _es_multiplo(numero1,numero2){
-    if(numero1 % numero2 == 0){
-        es_multiplo = true;
-    }
-    else {
-        es_multiplo = false;
-    }
-}
-
-function mostrar_resultado(respuesta){
-    if(respuesta == true){
-        alert("Sus numeros son multiplos");
-    }
-    else{
-        alert("Sus numeros no son multiplos");
-    }
-}
-
-ingresar_multiplos();
-_es_multiplo(num1,num2);
-mostrar_resultado(es_multiplo);
