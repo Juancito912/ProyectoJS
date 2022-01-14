@@ -1,32 +1,66 @@
 // Se pide el nombre al usuario
-var numIngresado = parseInt(prompt("Ingrese su numero:"));
-var numMaxRep =parseInt(prompt(" ¿Cuantas veces le sumamos 1? "))
+var num_ingresado;
+function ingresar() {
+    num_ingresado = parseInt(prompt("Ingrese su precio de costo:"));
 
-for(let i = 0; i < numMaxRep; i++){
-// escribe en el html el numero ingresado 
-    document.write(numIngresado);
-// aumenta el numero ingresado
-    numIngresado += 1;
-// pne un cambio de linea en el html
+    document.write ("El precio de costo es: " + num_ingresado + " Pesos");
+
     document.write("<br>");
 }
+let precio_final = 0;
 
-let entrada = prompt ("ingresa un dato")
+function sumar_IVA (precio_inicial){
+    const suma = function (a,b) {return a + b};
+    const sacar_IVA = function (a) {return a * 0.21}
 
-while(entrada != null) {
-    
-    document.write(entrada);
-
-    entrada = prompt("Ingresa otro dato");
+    precio_final = suma(precio_inicial,sacar_IVA(precio_inicial));
 }
+
+function mostrar_precio_final(precio){
+
+    document.write ("Su precio con IVA es: " + precio +" Pesos");
+
+}
+ingresar();
+sumar_IVA(num_ingresado);
+mostrar_precio_final(precio_final);
 document.write("<br>");
 
-let numero = 0;
-do {
-    let numSumar = parseInt(prompt("ingrese el numero para sumar"));
+var num1,num2;
 
-    numero += numSumar;
-    document.write(numero);
-    document.write("<br>");
+function ingresar_multiplos (){
 
-} while(parseInt(numero));
+    num1 = parseInt(prompt("ingrese un numero"));
+    num2 = parseInt(prompt("ingrese otro numero"));
+
+    if(!parseInt(num1) || !parseInt(num2)){
+        alert("ingrese numeros validos");
+        ingresar_multiplos();
+    }
+    else{
+        document.write("Sus numeros a verificar si son multiplos son " + num1 +", " + num2);
+    }
+
+}
+let es_multiplo;
+function _es_multiplo(numero1,numero2){
+    if(numero1 % numero2 == 0){
+        es_multiplo = true;
+    }
+    else {
+        es_multiplo = false;
+    }
+}
+
+function mostrar_resultado(respuesta){
+    if(respuesta == true){
+        alert("Sus numeros son multiplos");
+    }
+    else{
+        alert("Sus numeros no son multiplos");
+    }
+}
+
+ingresar_multiplos();
+_es_multiplo(num1,num2);
+mostrar_resultado(es_multiplo);
