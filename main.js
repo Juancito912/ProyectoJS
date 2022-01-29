@@ -1,98 +1,88 @@
+var nombre;
+// Se le pide el nombre al usuario
+function pedir_info(){
+    nombre = prompt("Ingrese su nombre por favor");
 
-// Se pide el nombre al usuario
-var monto, cuota,nombre_cliente,componentes_computadora;
-function ingresar_computadora() {
-    nombre_cliente = prompt("Cual es su nombre");
-    componentes_computadora = prompt("¿Que componentes desea incluir?");
-
-    monto = parseInt(prompt("Ingrese su monto total:"));
-    cuota = parseInt(prompt("¿En cuantas cuotas desea pagar?"));
+    //si es invalido, se le obliga a repetir la operacion
+    if (!nombre != ""){
+        alert("ERROR, ingrese un nombre valido");
+        pedir_info();
+    }
+    // Se saluda al usuario
+    else 
+        alert(nombre.toLocaleUpperCase() + ", Bienvenido a la Tienda de Computacion")
 
 }
-// var componentes = [];
 
-// function ingresar_componentes(){
-//     // var componente = prompt("Ingrese sus componentes q desea");
-//     do {
+// Funcion q dependiendo las cuotas, le incrementa el monto total
+function aplicar_recargo_cuotas (monto,cant_cuotas){
+    const suma = function (a,b) {return a + b};
 
-//         var componente = prompt("Ingrese sus componentes q desea");
-//         componentes.push(componente);
-
-//     }while (componente != null);
-//     alert ("Sus componenete son:" + componentes.join(", "));
-// }
-
-let precio_final = 0;
-class computadora{
-    constructor(nombre,componentes,precio,cuotas){
-
-        this.nombre = nombre.toUpperCase();
-        this.componentes = componentes;
-        this.precio = Number(precio);
-        this.cuotas = Number(cuotas);
-    }
-    saludar(){
-        alert("Bienvenido " + this.nombre);
-    }
-    calculo_cuotas (precio,cuota){
-        const suma = function (a,b) {return a + b};
-        switch(cuota) {
-    
-            case 3 :
-                precio_final = suma(precio,precio * 0.03);
-                return precio_final / 3;
-    
-            case 6 :
-                precio_final = suma(precio,precio * 0.06);
-                return precio_final / 6;
-            case 12:
-                precio_final = suma(precio,precio * 0.12);
-                return precio_final / 12;
-            case 24:
-                precio_final = suma(precio,precio * 0.24);
-                return precio_final / 24;
-            default :
-                precio_final = precio;
-                return precio;
-        }
-    }
-    mostrar_precio_final(monto_cuota,monto_total){
-        document.write ("Sacado en "+ this.cuotas + " cuotas seria un monto por cuota de: " + monto_cuota + " con un monto final de: " + monto_total);
+    switch(cant_cuotas) {
+        case 3:
+            return suma(monto,monto*0.08);
+        case 6:
+            return suma(monto,monto*0.1);
+        case 12:
+            return suma(monto,monto*0.15);
     }
 }
-ingresar_computadora();
-const clientes = [];
 
-clientes.push(new computadora(nombre_cliente,componentes_computadora,monto,cuota));
-clientes.push(new computadora("Stefano","mother 2 y ram 3",450,12));
-clientes.push(new computadora("Juan","mother 1 ram 1",500,3));
-clientes.push(new computadora("Gaston","mother 3 ram 2 ",300,6));
-clientes.push(new computadora("Fran","mother 2 ram 3",360,24));
-
-
-function ordenar_clientes_precio (){
-    clientes.sort(function(a,b){
-        if (a.precio > b.precio) {
-            return 1;
-        }
-        if (a.precio < b.precio) {
-            return -1;
-        }
-        return 0;
-    })
-    console.log(clientes);
+// Funcion q le resta un porcentaje al monto inicial, dependiendo del decuento q tenga
+function aplicar_descuento(monto,descuento){
+    const resta = function (a,b) {return a - b};
+    return resta(monto,monto*descuento);
 }
 
-// function ordenar_clientes_cuotas(){
-//     clientes.sort(function(a,b){
-//         if (b.cuotas > a.cuotas) {
-//             return 1;
-//         }
-//         if (b.cuotas < a.cuotas) {
-//             return -1;
-//         }
-//         return 0;
-//     })
-//     console.log(clientes)
-// }
-ordenar_clientes_precio();
+// Calcula el monto por cuota
+function aplicar_cuotas(monto,cant_cuotas){
+    return monto/cant_cuotas;
+}
+
+let precio,cuotas,descuento;
+// Funcion q da valores a las variables dependiendo que gama se desea
+function elejir_computadora(){
+    let tipo = prompt("¿Que gama de computadora desea?(baja,media o alta)");
+
+    switch(tipo) {
+
+        case "baja" :
+            precio = 1200;
+            cuotas = 3;
+            descuento = 0.1;
+            break;
+
+        case "media" :
+            precio = 2500;
+            cuotas = 6;
+            descuento = 0.15;
+            break;
+
+        case "alta" :
+            precio = 3700;
+            cuotas = 12;
+            descuento = 0.2;
+            break;
+
+        default :
+        alert("Escriba la gama correctamente");
+        elejir_computadora();
+    }
+
+}
+
+// llama a las anteriores funciones para darle datos al usuario
+function montrar_montos_finales(){
+    alert("El precio en un pago es de " + precio + " incluyendo el descuendo le queda en " + aplicar_descuento(precio,descuento));
+    alert("En cambio en "+cuotas + " cuotas el nuevo precio es de "+ aplicar_recargo_cuotas(precio,cuotas) 
+    + " siendo asi " + aplicar_cuotas(aplicar_recargo_cuotas(precio,cuotas),cuotas) + " por cuota");
+}
+// Se despide al usuario por consola
+function despedir (){
+    console.log(nombre + " ,muchas gracias por su visita");
+}
+
+pedir_info(); 
+elejir_computadora();
+montrar_montos_finales();
+despedir();
