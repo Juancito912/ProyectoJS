@@ -17,4 +17,23 @@ body {
 
 #contenedor, #carrito {
     color: white;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 20rem;
+}
+.card-title {
+    padding-top: 1rem;
+}
+.card-text {
+    margin-bottom: 0.5rem;
+}
+.card-img-top {
+    height: 30vh;
+}
+
+.btn:hover{
+    background-color: #990e31;
 }

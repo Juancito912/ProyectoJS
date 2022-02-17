@@ -23,7 +23,7 @@
 
 
 class computadora{
-    constructor(id,gama,precio,cuotas){
+    constructor(id,gama,precio,cuotas,img){
 
         this.id = id;
         this.gama = gama;
@@ -31,6 +31,7 @@ class computadora{
         this.precio = Number(precio);
         this.cuotas = Number(cuotas);
         this.precio_total = precio;
+        this.img = img;
     }
     calculo_cuotas (precio,cuota){
         const suma = function (a,b) {return a + b};
@@ -68,9 +69,9 @@ class computadora{
 const computadoras = [];
 
 // computadoras.push(new computadora(nombre_cliente,componentes_computadora,monto,cuota));
-computadoras.push(new computadora(0,"baja",300,12));
-computadoras.push(new computadora(1,"media",400,3));
-computadoras.push(new computadora(2,"alta ",500,6));
+computadoras.push(new computadora(0,"Baja",300,12,"./img/compu_mala.jpg"));
+computadoras.push(new computadora(1,"Media",400,3,"./img/compu_media.jpg"));
+computadoras.push(new computadora(2,"Alta ",500,6,"./img/compu_buena.jpg"));
 
 let carrito = [];
 let carritoEnHtml = document.getElementById("carrito");
@@ -79,20 +80,26 @@ let carritoEnHtml = document.getElementById("carrito");
 
 function imprimir_catalogo_HTML(computadoras){
 
-    let contenedor = document.getElementById("contenedor");
+    let contenedor = document.getElementById("contenedor")
 
     for (computadora of computadoras) {
-        let caja = document.createElement("div")
+        let caja = document.createElement("div");
 
         caja.innerHTML = `
-
-            <div class=caja">
-                <h2 class="caja-titulo"> ${computadora.gama} </h2>
-                <p class="caja-precio">$${computadora.precio}</p>
-                <p class="caja-cuotas">${computadora.cuotas} cuotas</p>
+            <div class="card m-2 bg-dark">
+                <div class="card-body text-center">
+                    <img src="${computadora.img}"class="card-img-top img-fluid" alt="computadoras">
+                    <h2 class="card-title"> ${computadora.gama} </h2>
+                    <p class="card-text">$${computadora.precio}</p>
+                    <p class="card-text">${computadora.cuotas} cuotas</p>
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-light">Agregar</button>
+                    </div>
+                </div>
             </div>
-    `;
-    contenedor.appendChild(caja);
+            `;
+        
+        contenedor.appendChild(caja);
     }
 }
 
