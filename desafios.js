@@ -22,7 +22,7 @@
 // }
 
 
-class computadora{
+class Computadora{
     constructor(id,gama,precio,cuotas,img){
 
         this.id = id;
@@ -69,12 +69,11 @@ class computadora{
 const computadoras = [];
 
 // computadoras.push(new computadora(nombre_cliente,componentes_computadora,monto,cuota));
-computadoras.push(new computadora(0,"Baja",300,12,"./img/compu_mala.jpg"));
-computadoras.push(new computadora(1,"Media",400,3,"./img/compu_media.jpg"));
-computadoras.push(new computadora(2,"Alta ",500,6,"./img/compu_buena.jpg"));
+computadoras.push(new Computadora(0,"Baja",300,12,"./img/compu_mala.jpg"));
+computadoras.push(new Computadora(1,"Media",400,3,"./img/compu_media.jpg"));
+computadoras.push(new Computadora(2,"Alta ",500,6,"./img/compu_buena.jpg"));
 
 let carrito = [];
-let carritoEnHtml = document.getElementById("carrito");
 
 // --FUNCIONES--
 
@@ -82,46 +81,37 @@ function imprimir_catalogo_HTML(computadoras){
 
     let contenedor = document.getElementById("contenedor")
 
-    for (computadora of computadoras) {
+    for (const computadora of computadoras) {
+
         let caja = document.createElement("div");
 
         caja.innerHTML = `
             <div class="card m-2 bg-dark">
                 <div class="card-body text-center">
-                    <img src="${computadora.img}"class="card-img-top img-fluid" alt="computadoras">
+                    <img src="${computadora.img}"class="card-img-top img-fluid" alt="computadora">
                     <h2 class="card-title"> ${computadora.gama} </h2>
                     <p class="card-text">$${computadora.precio}</p>
                     <p class="card-text">${computadora.cuotas} cuotas</p>
+
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <button type="button" class="btn btn-light">Agregar</button>
+                        <button id="agregar${computadora.id}" type="button" class="btn btn-light">Agregar</button>
                     </div>
                 </div>
             </div>
             `;
         
         contenedor.appendChild(caja);
+
+        let boton = document.getElementById(`agregar${computadora.id}`);
+
+        boton.onclick = () => agregar_carrito(computadora.id);
+
     }
+    console.log(compu.id);
 }
 
-function seleccionar_producto() {
-    let id_producto =
-    prompt(`Escriba el número del producto a comprar, o escriba 'ESC' para finalizar
 
-0:${computadoras[0].gama}, Precio: ${computadoras[0].precio}, Cuotas: ${computadoras[0].cuotas}
-1:${computadoras[1].gama}, Precio: ${computadoras[1].precio}, Cuotas: ${computadoras[1].cuotas}
-2:${computadoras[2].gama}, Precio: ${computadoras[2].precio}, Cuotas: ${computadoras[2].cuotas}`);
-
-    return id_producto;
-}
-
-function menu_compras(){
-    let id_producto = seleccionar_producto();
-
-    while (id_producto !== "ESC"){
-    let mensaje = document.createElement("div");
-    mensaje.textContent = `Se ha añadido al carrito la computadora de gama ${computadoras[id_producto].gama}`;
-    carritoEnHtml.appendChild(mensaje);
-
+function agregar_carrito(id_producto){
     
     let computadora_en_carrito = carrito.find((elemento) => {
         if (elemento.id == id_producto) {
@@ -130,36 +120,58 @@ function menu_compras(){
     });
 
     if (computadora_en_carrito) {
-    
-    let index = carrito.findIndex((elemento) => {
-        if (elemento.id === computadora_en_carrito.id) {
-            return true;
-        }
-    });
+        
+        let index = carrito.findIndex((elemento) => {
+            if (elemento.id === computadora_en_carrito.id) {
+                return true;
+            }
+        });
 
-    carrito[index].agregar_cantidad();
-    carrito[index].calculo_precio_final();
+        carrito[index].agregar_cantidad();
+        carrito[index].calculo_precio_final();
     } else {
-    
+
         carrito.push(computadoras[id_producto]);
     }
 
-    id_producto = seleccionar_producto();
+    escribir_carrito(carrito);
 }
 
-    let precio_final = obtener_precio_total();
-    imprimir_precio_total(precio_final);
-}
+function escribir_carrito(carrito) {
+    let carritoEnHtml = document.getElementById("carrito");
+    carritoEnHtml.innerHTML = "";
 
-function obtener_precio_total() {
+    let precio_final;
+
+    precio_final = obtener_precio_total(carrito);
+
+    let mensaje = document.createElement("div");
+    
+    mensaje.textContent = `Total:$${precio_final}`;
+
+    carritoEnHtml.appendChild(mensaje);
+
+    for(let computadora of carrito){
+        let mensaje = document.createElement("div");
+
+        mensaje.innerText = `${computadora.cantidad} Gama ${computadora.gama} $${computadora.precio_total}.
+        `;
+
+
+        carritoEnHtml.appendChild(mensaje);
+    }
+
+}
+function obtener_precio_total(computadoras) {
     let precio_final = 0;
 
-    for (const producto of carrito) {
+    for (const producto of computadoras) {
     precio_final += producto.precio_total;
     }
 
     return precio_final;
 }
+
 function imprimir_precio_total(precio_total) {
     
     let mensaje = document.createElement("div");
@@ -171,7 +183,7 @@ function imprimir_precio_total(precio_total) {
 }
 
 imprimir_catalogo_HTML(computadoras);
-menu_compras();
+// menu_compras();
 // function ordenar_clientes_precio (){
 //     clientes.sort(function(a,b){
 //         if (a.precio > b.precio) {

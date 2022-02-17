@@ -15,10 +15,13 @@ body {
     background-repeat: no-repeat;
 }
 
-#contenedor, #carrito {
+#contenedor {
     color: white;
     display: flex;
     flex-wrap: wrap;
+}
+#carrito {
+    color:white;
 }
 
 .card {
