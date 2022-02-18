@@ -46,12 +46,11 @@ class Computadora{
 // --VARIABLES Y CONSTANTES--
 const computadoras = [];
 
-// computadoras.push(new computadora(nombre_cliente,componentes_computadora,monto,cuota));
 computadoras.push(new Computadora(0,"Baja",300,12,"./img/compu_mala.jpg"));
 computadoras.push(new Computadora(1,"Media",400,3,"./img/compu_media.jpg"));
 computadoras.push(new Computadora(2,"Alta ",500,6,"./img/compu_buena.jpg"));
 
-let carrito = [];
+let carrito;
 
 // --FUNCIONES--
 
@@ -110,6 +109,8 @@ function agregar_carrito(id_producto){
 
         carrito.push(computadoras[id_producto]);
     }
+    // guarda los datos en el storage
+    localStorage.setItem("carrito_storage", JSON.stringify(carrito));
 
     escribir_carrito(carrito);
 }
@@ -205,6 +206,10 @@ function eliminar_carrito(id_producto){
     } else {
         carrito.splice(index,1);
     }
+
+    // elimina los datos en el storage
+    localStorage.setItem("carrito_storage", JSON.stringify(carrito));
+
     escribir_carrito(carrito);
 }
 
@@ -218,4 +223,33 @@ function obtener_precio_total(computadoras) {
     return precio_final;
 }
 
+function chequear_storage (){
+
+    let contenido_storage = JSON.parse(localStorage.getItem("carrito_storage"));
+    
+
+    let compus = [];
+    if(contenido_storage){
+        
+        for (let i = 0; i < contenido_storage.length; i++) {
+            let computadora = new Computadora(
+                contenido_storage[i].id,
+                contenido_storage[i].gama,
+                contenido_storage[i].precio,
+                contenido_storage[i].cuotas,
+                contenido_storage[i].img);
+            computadora.cantidad = contenido_storage[i].cantidad;
+            computadora.calculo_precio_final();
+            compus.push(computadora);
+            
+        }
+    }
+    return compus;
+}
+
 imprimir_catalogo_HTML(computadoras);
+
+// --consulta al storage si hay datos
+// si hay, se refresca la pagina con los datos
+carrito = chequear_storage();
+escribir_carrito(carrito);
