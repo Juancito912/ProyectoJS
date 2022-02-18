@@ -177,6 +177,7 @@ function escribir_total(tabla){
         <td class="table-active"><button id="eliminar" type="button" class="boton2 btn btn-dark">Eliminar carrito</button>
     `;
     tabla.appendChild(table);
+    
     let boton_eliminar = document.getElementById("eliminar");
     boton_eliminar.onclick = () => vaciar_carrito();
 }
