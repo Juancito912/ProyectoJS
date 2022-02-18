@@ -1,27 +1,4 @@
-// Se pide el nombre al usuario
-// var monto, cuota,nombre_cliente,componentes_computadora;
-// function ingresar_computadora() {
-//     nombre_cliente = prompt("Cual es su nombre");
-//     componentes_computadora = prompt("¿Que componentes desea incluir?");
-
-//     monto = parseInt(prompt("Ingrese su monto total:"));
-//     cuota = parseInt(prompt("¿En cuantas cuotas desea pagar?"));
-
-// }
-// var componentes = [];
-
-// function ingresar_componentes(){
-//     // var componente = prompt("Ingrese sus componentes q desea");
-//     do {
-
-//         var componente = prompt("Ingrese sus componentes q desea");
-//         componentes.push(componente);
-
-//     }while (componente != null);
-//     alert ("Sus componenete son:" + componentes.join(", "));
-// }
-
-
+// --COSNTRUCTOR--
 class Computadora{
     constructor(id,gama,precio,cuotas,img){
 
@@ -58,14 +35,15 @@ class Computadora{
     agregar_cantidad(){
         this.cantidad++;
     }
+    eliminar_cantidad(){
+        this.cantidad--;
+    }
     calculo_precio_final(){
         this.precio_total = this.precio * this.cantidad;
     }
-    mostrar_precio_final(monto_cuota,monto_total){
-        document.write ("Sacado en "+ this.cuotas + " cuotas seria un monto por cuota de: " + monto_cuota + " con un monto final de: " + monto_total);
-    }
 }
-// ingresar_computadora();
+
+// --VARIABLES Y CONSTANTES--
 const computadoras = [];
 
 // computadoras.push(new computadora(nombre_cliente,componentes_computadora,monto,cuota));
@@ -94,7 +72,7 @@ function imprimir_catalogo_HTML(computadoras){
                     <p class="card-text">${computadora.cuotas} cuotas</p>
 
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <button id="agregar${computadora.id}" type="button" class="btn btn-light">Agregar</button>
+                        <button id="agregar${computadora.id}" type="button" class="boton btn btn-light">Agregar</button>
                     </div>
                 </div>
             </div>
@@ -107,7 +85,6 @@ function imprimir_catalogo_HTML(computadoras){
         boton.onclick = () => agregar_carrito(computadora.id);
 
     }
-    console.log(compu.id);
 }
 
 
@@ -138,30 +115,99 @@ function agregar_carrito(id_producto){
 }
 
 function escribir_carrito(carrito) {
-    let carritoEnHtml = document.getElementById("carrito");
-    carritoEnHtml.innerHTML = "";
 
-    let precio_final;
+    let contenedor = document.getElementById("carrito");
+    contenedor.innerHTML = "";
 
-    precio_final = obtener_precio_total(carrito);
+    let table = document.createElement("div");
 
-    let mensaje = document.createElement("div");
-    
-    mensaje.textContent = `Total:$${precio_final}`;
+    table.innerHTML= `
+    <table class="table table-dark table-sm">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Gama</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Acción</th>
+            </tr>
+        </thead>
+        <tbody id="table_body">
+            
+        </tbody>
+    </table>
+    `;
 
-    carritoEnHtml.appendChild(mensaje);
+    contenedor.appendChild(table);
 
-    for(let computadora of carrito){
-        let mensaje = document.createElement("div");
+    let table_body = document.getElementById("table_body");
 
-        mensaje.innerText = `${computadora.cantidad} Gama ${computadora.gama} $${computadora.precio_total}.
+    for(const computadora of carrito){
+
+        let compra = document.createElement("tr");
+        compra.innerHTML = `
+        
+            <th scope="row">${computadora.id+1}</th>
+                <td>${computadora.gama}</td>
+                <td>${computadora.cantidad}</td>
+                <td>$${computadora.precio_total}</td>
+                <td><button id="eliminar${computadora.id}" type="button" class="boton2 btn btn-dark">Eliminar</button></td>
         `;
 
-
-        carritoEnHtml.appendChild(mensaje);
+        table_body.appendChild(compra);
+        let boton_eliminar = document.getElementById(`eliminar${computadora.id}`);
+        boton_eliminar.onclick = () => eliminar_carrito(computadora.id);
     }
-
+    
+    escribir_total(table_body);
+    
 }
+
+function escribir_total(tabla){
+    let precio_final = obtener_precio_total(carrito);
+    let table;
+    
+    table = document.createElement("tr");
+
+    table.innerHTML =`
+    <th scope="row" class="table-active"></th>
+        <td colspan="2" class="table-active">TOTAL</td>
+        <td class="table-active">$${precio_final}</td>
+        <td class="table-active"><button id="eliminar" type="button" class="boton2 btn btn-dark">Eliminar carrito</button>
+    `;
+    tabla.appendChild(table);
+    let boton_eliminar = document.getElementById("eliminar");
+    boton_eliminar.onclick = () => vaciar_carrito();
+}
+
+function vaciar_carrito(){
+
+    for(let computadora of carrito){
+        computadora.cantidad = 1;
+        computadora.calculo_precio_final();
+        eliminar_carrito(computadora.id);
+    }
+    
+}
+function eliminar_carrito(id_producto){
+
+    let compu_eliminado = carrito.find((elemento) => elemento.id === id_producto);
+
+    let index = carrito.findIndex((elemento) => {
+        if (elemento.id === compu_eliminado.id) {
+            return true;
+        }
+    });
+
+    if(compu_eliminado.cantidad > 1){
+        carrito[index].eliminar_cantidad();
+        carrito[index].calculo_precio_final();
+    } else {
+        carrito.splice(index,1);
+    }
+    escribir_carrito(carrito);
+}
+
 function obtener_precio_total(computadoras) {
     let precio_final = 0;
 
@@ -172,41 +218,4 @@ function obtener_precio_total(computadoras) {
     return precio_final;
 }
 
-function imprimir_precio_total(precio_total) {
-    
-    let mensaje = document.createElement("div");
-
-    // Agregamos el mensaje a dicho div
-    mensaje.textContent = `El precio total de tu compra es de ${precio_total}`;
-
-    carritoEnHtml.appendChild(mensaje);
-}
-
 imprimir_catalogo_HTML(computadoras);
-// menu_compras();
-// function ordenar_clientes_precio (){
-//     clientes.sort(function(a,b){
-//         if (a.precio > b.precio) {
-//             return 1;
-//         }
-//         if (a.precio < b.precio) {
-//             return -1;
-//         }
-//         return 0;
-//     })
-//     console.log(clientes);
-// }
-
-// function ordenar_clientes_cuotas(){
-//     clientes.sort(function(a,b){
-//         if (b.cuotas > a.cuotas) {
-//             return 1;
-//         }
-//         if (b.cuotas < a.cuotas) {
-//             return -1;
-//         }
-//         return 0;
-//     })
-//     console.log(clientes)
-// }
-// ordenar_clientes_precio();
