@@ -14,6 +14,9 @@ body {
     background-position:center;
     background-repeat: no-repeat;
 }
+#pestaña-activa{
+    color:blue ;
+}
 
 #contenedor {
     color: white;
@@ -25,7 +28,7 @@ body {
 }
 
 .card {
-    width: 20rem;
+    width: 23rem;
 }
 .card-title {
     padding-top: 1rem;
@@ -39,8 +42,4 @@ body {
 
 .btn:hover{
     background-color: #990e31;
-}
-
-.boton2{
-    padding: 0px;
 }

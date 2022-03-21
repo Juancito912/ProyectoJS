@@ -65,16 +65,16 @@ function verificarInfo(persona){
         alert("Por favor, ingrese un mail válido");
         return false;
     }
-    if(!persona.contraseña != "" || !checkContra(persona.contraseña)){
+    if(!persona.contraseña != "" || !checkContra(persona.contraseña)|| checkNoNum(persona.contraseña)){
         alert(`Escriba una contraseña correcta.
-Debe tener al menos una letra mayuscula y 6 digitos.`);
+Debe tener al menos 6 digitos, una letra mayuscula y un numero.`);
         return false;
         
     }
 
     alert(`Bienvenido a la tienda de computación, ${persona.nombre} ${persona.apellido}.
 
-A continuacion le mostraremos nuestros productos.`);
+A continuacion le mostraremos nuestra tienda.`);
     window.open("tienda.html");
 
     return true;

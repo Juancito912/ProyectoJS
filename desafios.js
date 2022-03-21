@@ -63,8 +63,8 @@ function imprimir_catalogo_HTML(computadoras){
         let caja = document.createElement("div");
 
         caja.innerHTML = `
-            <div class="card m-2 bg-dark">
-                <div class="card-body text-center">
+            <div class="card m-3 bg-dark text-center">
+                <div class="card-body">
                     <img src="${computadora.img}"class="card-img-top img-fluid" alt="computadora">
                     <h2 class="card-title"> ${computadora.gama} </h2>
                     <p class="card-text">$${computadora.precio}</p>
