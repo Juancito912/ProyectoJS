@@ -12,7 +12,7 @@
 body {
     background-image: url("./img/fondo1.jpg");
     background-position:center;
-    background-repeat: no-repeat;
+    
 }
 #pestaña-activa{
     color:blue ;
@@ -32,6 +32,12 @@ body {
 }
 .card-title {
     padding-top: 1rem;
+    color: black;
+}
+.card-text{
+    color: black;
+    font-size: 1.2rem;
+    font-weight: 500;
 }
 .card-text {
     margin-bottom: 0.5rem;
