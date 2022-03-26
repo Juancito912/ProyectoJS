@@ -139,7 +139,7 @@ function agregarProducto(id){
     dibujarCarrito(carrito);
 }
 
-function eliminarProducto(id){
+function eliminarProductoUno(id){
     let compuEnCarrito = buscarProducto(carrito,id);
     let index = buscarIndexProducto(carrito,id);
     if(compuEnCarrito.cantidad > 1){
@@ -150,6 +150,13 @@ function eliminarProducto(id){
     }
     dibujarCarrito(carrito);
 }
+
+function eliminarProducto(id){
+    let index = buscarIndexProducto(carrito,id);
+    carrito.splice(index,1);
+    dibujarCarrito(carrito);
+}
+
 function calculoTotalCompra(array){
     let total =0;
     for(let computadora of array){
@@ -173,7 +180,7 @@ function dibujarCarrito(array){
         `);
     } else {
         $("#carrito").append(`
-        <table class="table table-light table-bordered">
+        <table class="table table-light table-bordered fs-5">
             <thead>
                 <tr class="table-info">
                     <th scope="col">  </th>
@@ -195,12 +202,18 @@ function dibujarCarrito(array){
                 <td> <img src="${computadora.img}"class="img-fluid img-car" alt=" ${computadora.gama}"> </td>
                 <td class="p-4">${computadora.descripcion}</td>
                 <td class="p-4">${computadora.precio} ${moneda}</td>
-                <td class="text-center p-4">${computadora.cantidad}</td>
+                <td class="p-4"><button class="btn btn-dark" type="button" id="sumar${computadora.id}"> + </button> <span>${computadora.cantidad} </span> <button class="btn btn-dark" type="button" id="sacar${computadora.id}"> - </button></td>
                 <td class="p-4">${computadora.precioTotal} ${moneda}</td>
-                <td><button class="btn btn-dark" type="button" id="eliminar${computadora.id}"> - </button></td>
+                <td class=""><img src="img/icono.png" id="eliminarProducto${computadora.id}" class="icon m-2" alt="icono"></td>
                 </tr>
             `);
-            $(`#eliminar${computadora.id}`).on("click", () => {
+            $(`#sumar${computadora.id}`).on("click", () => {
+                agregarProducto(computadora.id);
+            });
+            $(`#sacar${computadora.id}`).on("click", () => {
+                eliminarProductoUno(computadora.id);
+            });
+            $(`#eliminarProducto${computadora.id}`).on("click", () => {
                 eliminarProducto(computadora.id);
             });
         }
