@@ -3,6 +3,10 @@
     margin: 0;
     box-sizing: border-box;
 }
+a{
+    text-decoration: none;
+    color: black;
+}
 .nav-link {
     color: black;
 }
@@ -48,4 +52,9 @@ body {
 
 .btn:hover{
     background-color: #990e31;
+}
+
+.img-car{
+    width: 4rem;
+    height: 7vh;
 }

@@ -6,6 +6,8 @@ class Computadora {
         this.precio = computadora.precio;
         this.precioTotal = computadora.precio;
         this.cantidad = 0;
+        this.descripcion=computadora.descripcion;
+        this.img = computadora.img;
     }
     agregarUnidad(){
         this.cantidad++;
@@ -82,7 +84,7 @@ function imprimirCatalogo(computadoras){
         $("#contenedor").append(`
         <div class="card m-2 bg-light">
             <div class="card-body text-center">
-                <img src="${computadora.img}"class="card-img-top img-fluid" alt="computadora">
+                <img src="${computadora.img}"class="card-img-top img-fluid" alt=" ${computadora.gama}">
                 <h2 class="card-title"> ${computadora.gama} </h2>
                 <h6 class="card-subtitle text-muted">${computadora.descripcion}</h5>
                 <p class="card-text">${computadora.precio} ${moneda}</p>
@@ -93,9 +95,6 @@ function imprimirCatalogo(computadoras){
         </div>
         `);
 
-        $(`#eliminar${computadora.id}`).on("click", () => {
-            eliminarProducto(computadora.id);
-        });
         $(`#agregar${computadora.id}`).on("click", () => {
             agregarProducto(computadora.id);
         });
@@ -149,6 +148,7 @@ function eliminarProducto(id){
     }else{
         carrito.splice(index,1);
     }
+    dibujarCarrito(carrito);
 }
 function calculoTotalCompra(array){
     let total =0;
@@ -161,18 +161,48 @@ function calculoTotalCompra(array){
 function dibujarCarrito(array){
 
     $("#carrito").html("");
-    
+
+    $("#carrito").append(`<h2 class="mb-4 mt-4 fw-bold text-decoration-underline text-center"> Carrito de Compras </h2>`);
+
     if(array.length === 0){
         $("#carrito").append(`
-        <h2 class="text-left"> Carrito de Compras </h2>
-        <h4> No hay elementos en el carrito </h4>
-        <button class="btn btn-dark" type="button" id="arriba"> <a href="#header">Seguir comprando </a> </button>
+        <div class="text-center mt-3">
+            <h4 class="mb-3"> No hay elementos en el carrito </h4>
+            <button class="btn btn-dark" type="button" > <a href="#header">Seguir comprando </a> </button>
+        </div>
         `);
     } else {
-        for(let compu of array){
-            $("#carrito").append(`
-            <p> ${compu.cantidad} x ${compu.gama}-${compu.precio} ${moneda} </p>
+        $("#carrito").append(`
+        <table class="table table-light table-bordered">
+            <thead>
+                <tr class="table-info">
+                    <th scope="col">  </th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Subtotal</th>
+                    <th scope="col">  </th>
+                </tr>
+            </thead>
+            <tbody id="tabla">
+
+            </tbody>
+        </table>
         `);
+        for(const computadora of array){
+            $("#tabla").append(`
+                <tr class="">
+                <td> <img src="${computadora.img}"class="img-fluid img-car" alt=" ${computadora.gama}"> </td>
+                <td class="p-4">${computadora.descripcion}</td>
+                <td class="p-4">${computadora.precio} ${moneda}</td>
+                <td class="text-center p-4">${computadora.cantidad}</td>
+                <td class="p-4">${computadora.precioTotal} ${moneda}</td>
+                <td><button class="btn btn-dark" type="button" id="eliminar${computadora.id}"> - </button></td>
+                </tr>
+            `);
+            $(`#eliminar${computadora.id}`).on("click", () => {
+                eliminarProducto(computadora.id);
+            });
         }
         
     }
