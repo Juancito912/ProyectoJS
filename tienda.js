@@ -165,6 +165,41 @@ function calculoTotalCompra(array){
     return total;
 }
 
+function dibujarTotal(array){
+    let total= calculoTotalCompra(array);
+    $("#carrito").append(`
+        <div class="bg-secondary carrito p-3">   
+            <h2 class=""> Total del carrito </h2>
+            <table class="table table-borderless">
+            <tbody>
+                <tr>
+                    <th> Subtotal </th>
+                    <th> ${total} ${moneda} </th>
+                </tr>
+                <tr>
+                    <th> Cuotas </th>
+                    <th> </th>
+                </tr>
+                <tr>
+                    <th> Envío </th>
+                    <th><ul class="p-1 m-0 bg-secondary">
+                        <label class="list-group-item p-1 bg-secondary">
+                        <input class="form-check-input me-1" type="checkbox" value="1"> Retiro en Sucursal </label>
+                        <label class="list-group-item p-1 bg-secondary">
+                        <input class="form-check-input me-1" type="checkbox" value="2"> Envío a Domicilio </label>
+                    </ul></th>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    `);
+}
+
+function vaciarCarrito(){
+    carrito = [];
+    dibujarCarrito(carrito);
+}
+
 function dibujarCarrito(array){
 
     $("#carrito").html("");
@@ -180,15 +215,15 @@ function dibujarCarrito(array){
         `);
     } else {
         $("#carrito").append(`
-        <table class="table table-light table-bordered fs-5">
+        <table class="table table-light table-bordered fs-5 mb-2">
             <thead>
                 <tr class="table-info">
-                    <th scope="col">  </th>
-                    <th scope="col">Producto</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">Subtotal</th>
-                    <th scope="col">  </th>
+                    <th scope="col" class="">  </th>
+                    <th scope="col" class="ps-4">Producto</th>
+                    <th scope="col" class="ps-4">Precio</th>
+                    <th scope="col" class="ps-4">Cantidad</th>
+                    <th scope="col" class="ps-4">Subtotal</th>
+                    <th scope="col" class="p-0">  </th>
                 </tr>
             </thead>
             <tbody id="tabla">
@@ -198,15 +233,17 @@ function dibujarCarrito(array){
         `);
         for(const computadora of array){
             $("#tabla").append(`
-                <tr class="">
-                <td> <img src="${computadora.img}"class="img-fluid img-car" alt=" ${computadora.gama}"> </td>
-                <td class="p-4">${computadora.descripcion}</td>
-                <td class="p-4">${computadora.precio} ${moneda}</td>
-                <td class="p-4"><button class="btn btn-dark" type="button" id="sumar${computadora.id}"> + </button> <span>${computadora.cantidad} </span> <button class="btn btn-dark" type="button" id="sacar${computadora.id}"> - </button></td>
-                <td class="p-4">${computadora.precioTotal} ${moneda}</td>
-                <td class=""><img src="img/icono.png" id="eliminarProducto${computadora.id}" class="icon m-2" alt="icono"></td>
+                <tr>
+                    <td class="ps-2"> <img src="${computadora.img}"class="img-fluid img-car" alt=" ${computadora.gama}"> </td>
+                    <td class="p-4">${computadora.descripcion}</td>
+                    <td class="p-4">${computadora.precio} ${moneda}</td> 
+                    <td class="p-4"><button class="btn btn-dark btn-carr me-2" type="button" id="sacar${computadora.id}"> - </button> <span>${computadora.cantidad} </span> <button class="btn btn-dark btn-carr ms-2" type="button" id="sumar${computadora.id}"> + </button></td>
+                    <td class="p-4">${computadora.precioTotal} ${moneda}</td>
+                    <td class=""><img src="img/icono.png" id="eliminarProducto${computadora.id}" class="icon m-2" alt="icono"></td>
                 </tr>
+                
             `);
+            
             $(`#sumar${computadora.id}`).on("click", () => {
                 agregarProducto(computadora.id);
             });
@@ -217,7 +254,15 @@ function dibujarCarrito(array){
                 eliminarProducto(computadora.id);
             });
         }
-        
+        $("#carrito").append(` 
+            <div class="btn-group float-end p-1">
+                <button class="btn btn-dark p-2" type="button" id="vaciar"> Vaciar Carrito </button>
+            </div>
+            `); 
+            $(`#vaciar`).on("click", () => {
+                vaciarCarrito();
+            });
+        dibujarTotal(carrito);
     }
 }
 imprimirCatalogo(computadoras);
