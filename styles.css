@@ -30,7 +30,9 @@ body {
 #carrito {
     color:white;
 }
-
+.text-decoration-underline{
+    color: black;
+}
 .card {
     width: 23rem;
 }

@@ -103,6 +103,7 @@ function imprimirCatalogo(computadoras){
 }
 
 
+
 function buscarProducto(array,id){
     if(array.length === 0){
         return undefined;
@@ -165,11 +166,43 @@ function calculoTotalCompra(array){
     return total;
 }
 
+const cuotas = [{num:"Seleccione una opción"},{num:1},{num:3},{num:6},{num:12},{num:24}];
+function lista(array) {
+    let opciones = "";
+    array.forEach(cuota => opciones += `<option value="${cuota.num}"> ${cuota.num} </option>`);
+    return `<select> ${opciones} </select>`;
+}
+let precio_final;
+function calculoTotalRecargo(total,cuotas){
+    const suma = function (a,b) {return a + b};
+    
+    switch(cuotas) {
+        
+        case 3 :
+            precio_final = suma(total,total * 0.03);
+            return precio_final / 3;
+
+        case 6 :
+            precio_final = suma(total,total * 0.06);
+            return precio_final / 6;
+        case 12:
+            precio_final = suma(total,total * 0.12);
+            return precio_final / 12;
+        case 24:
+            precio_final = suma(total,total * 0.24);
+            return precio_final / 24;
+        default :
+            precio_final = total;
+            return precio_final;
+    }
+    
+}
+
 function dibujarTotal(array){
     let total= calculoTotalCompra(array);
     $("#carrito").append(`
         <div class="bg-secondary carrito p-3">   
-            <h2 class=""> Total del carrito </h2>
+            <h2 class="text-decoration-underline fw-bold"> Total del carrito </h2>
             <table class="table table-borderless">
             <tbody>
                 <tr>
@@ -178,21 +211,41 @@ function dibujarTotal(array){
                 </tr>
                 <tr>
                     <th> Cuotas </th>
-                    <th> </th>
+                    <th id="lista"> ${lista(cuotas)}</th>
                 </tr>
                 <tr>
                     <th> Envío </th>
                     <th><ul class="p-1 m-0 bg-secondary">
-                        <label class="list-group-item p-1 bg-secondary">
-                        <input class="form-check-input me-1" type="checkbox" value="1"> Retiro en Sucursal </label>
-                        <label class="list-group-item p-1 bg-secondary">
-                        <input class="form-check-input me-1" type="checkbox" value="2"> Envío a Domicilio </label>
+                        <label class="list-group-item p-1 bg-secondary for="local">
+                        <input class="form-check-input me-1" type="checkbox" name="envio" autocomplete="off" id="local" value="1"> Retiro en Sucursal </label>
+                        <label class="list-group-item p-1 bg-secondary for="casa">
+                        <input class="form-check-input me-1" type="checkbox" name="envio" autocomplete="off" id="casa" value="2" checked> Envío a Domicilio </label>
                     </ul></th>
                 </tr>
             </tbody>
+            <tfoot class="table-dark" id="foot">
+                
+            </tfoot>
             </table>
         </div>
     `);
+    $("#lista").change(function (e) {  
+        
+        let cuota =Number(e.target.value) ;
+        console.log(cuota);
+        $("#foot").html("");
+        $("#foot").append(`
+        <tr>
+            <th> Total por cuota </th>
+            <th> ${calculoTotalRecargo(total,cuota)} ${moneda}</th>
+        </tr>
+        <tr>
+            <th> Total </th>
+            <th> ${precio_final} ${moneda}</th>
+        </tr>
+    `);
+    });
+    
 }
 
 function vaciarCarrito(){
@@ -218,7 +271,7 @@ function dibujarCarrito(array){
         <table class="table table-light table-bordered fs-5 mb-2">
             <thead>
                 <tr class="table-info">
-                    <th scope="col" class="">  </th>
+                    <th scope="col" class="p-0">  </th>
                     <th scope="col" class="ps-4">Producto</th>
                     <th scope="col" class="ps-4">Precio</th>
                     <th scope="col" class="ps-4">Cantidad</th>

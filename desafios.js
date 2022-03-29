@@ -254,9 +254,10 @@ function lista(array) {
     let opciones = "";
     let i = 0;
     array.forEach(personaje => opciones += `<option value="${i++}"> ${personaje.name} </option>`);
-    return `<select> ${opciones} </select>`;
+    return `<select>xfadfadfa ${opciones} </select>`;
     
 }
+
 $(document).ready(()=>{
     $.get(URL,function (data, state) {
             if(state === "success"){
